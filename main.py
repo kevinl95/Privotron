@@ -16,13 +16,74 @@ from playwright.sync_api import sync_playwright
 @click.option("--first", required=False, help="First name")
 @click.option("--last", required=False, help="Last name")
 @click.option("--email", required=False, help="Email address")
+@click.option("--city", required=False, help="City")
+@click.option(
+    "--state",
+    required=False,
+    help="State",
+    type=click.Choice(
+        [
+            "AL",
+            "AK",
+            "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
+            "WY",
+        ],
+        case_sensitive=False,
+    ),
+)
 @click.option("--zip", required=False, help="ZIP/Postal code")
 @click.option("--profile", required=False, help="Load saved profile")
 @click.option(
     "--save-profile", required=False, help="Save current arguments as a profile"
 )
 @click.option("--reset", is_flag=True, help="Reset processed brokers for the profile")
-def run_optout(first, last, email, zip, profile, save_profile, reset):
+def run_optout(first, last, email, city, state, profile, zip, save_profile, reset):
     # Set up directories and files
     broker_dir = "brokers"
     skip_file = os.path.join(broker_dir, ".skipbrokers")
@@ -77,6 +138,8 @@ def run_optout(first, last, email, zip, profile, save_profile, reset):
             "last_name": last,
             "email": email,
             "zip": zip,
+            "city": city,
+            "state": state,
             "processed_brokers": processed_brokers,
             "last_updated": datetime.now().isoformat(),
         }

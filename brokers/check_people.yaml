@@ -1,0 +1,33 @@
+name: CheckPeople.com
+slug: checkpeople
+url: https://checkpeople.com
+required_fields:
+  - first_name
+  - last_name
+  - email
+  - city
+  - state
+steps:
+  - action: navigate
+    url: "https://checkpeople.com/do-not-sell-info"
+  - action: fill
+    selector: "#firstName"
+    field: first_name
+  - action: fill
+    selector: "#lastName"
+    field: last_name
+  - action: fill
+    selector: "#email"
+    field: email
+  - action: fill
+    selector: "#zip"
+    field: zip
+  - action: click
+    selector: "#searchButton"
+  - action: wait
+    seconds: 5
+  - action: prompt_user_to_select_record
+    selector: ".record-result"
+    description: "Choose a record to remove"
+  - action: click
+    selector: "#submitOptOut"
