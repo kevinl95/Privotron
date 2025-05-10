@@ -3,6 +3,7 @@ import yaml
 import time
 import os
 import sys
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
@@ -17,7 +18,18 @@ from playwright.sync_api import sync_playwright
 def run_optout(first, last, email, zip):
     configs = []
     broker_dir = "brokers"
-
+    skip_file = os.path.join(broker_dir, ".skipbrokers")
+    skipped_brokers = []
+    
+    # Read skip file if it exists
+    if os.path.exists(skip_file):
+        try:
+            with open(skip_file, "r") as f:
+                skipped_brokers = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+            print(f"Skipping brokers: {', '.join(skipped_brokers)}")
+        except Exception as e:
+            print(f"Warning: Could not read skip file: {e}")
+    
     # Iterate through all yaml files in brokers directory
     for filename in os.listdir(broker_dir):
         if filename.endswith(".yaml"):
@@ -25,6 +37,10 @@ def run_optout(first, last, email, zip):
             try:
                 with open(yaml_path, "r") as f:
                     config = yaml.safe_load(f)
+                    # Skip this broker if its slug is in the skip list
+                    if config.get("slug") in skipped_brokers:
+                        print(f"Skipping {config['name']} (from skip file)")
+                        continue
                     configs.append(config)
             except yaml.YAMLError as e:
                 print(f"Error parsing {filename}: {e}")

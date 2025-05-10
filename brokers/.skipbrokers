@@ -1,0 +1,3 @@
+# List broker slugs to skip (one per line)
+# Example:
+acme
