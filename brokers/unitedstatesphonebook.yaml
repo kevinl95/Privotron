@@ -1,0 +1,19 @@
+name: United States Phonebook
+slug: unitedstatesphonebook
+url: https://www.unitedstatesphonebook.com/
+required_fields:
+  - phone
+  - zip
+steps:
+  - action: navigate
+    url: "https://www.unitedstatesphonebook.com/contact.php"
+  - action: fill
+    selector: '[name="number"]'
+    field: phone
+  - action: fill
+    selector: '[name="zip"]'
+    field: zip
+  - action: click
+    selector: '[value="Request Removal"]'
+  - action: wait
+    seconds: 5
