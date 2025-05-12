@@ -70,6 +70,7 @@ python main.py --profile "john" --reset
 - When using a profile, previously processed brokers are automatically skipped
 - You can override saved information by providing command line arguments
 - Parallel processing allows multiple opt-outs to run simultaneously
+- State values are automatically converted between full names and abbreviations as needed
 
 ### Security Note
 
@@ -80,3 +81,46 @@ precautions to protect this information:
 - Ensure your computer is secured with a strong password
 - Consider encrypting your disk
 - Be careful when sharing your computer or profile files with others
+
+## Broker Configuration
+
+### State Selection
+
+For forms that require state selection, you can use the special `select_state` action:
+
+```yaml
+# For dropdowns that use state abbreviations (AL, AK, AZ, etc.)
+- action: select_state
+  selector: "#state"
+  format: abbr
+  
+# For dropdowns that use full state names
+- action: select_state
+  selector: "#state"
+```
+
+### Select Options
+
+There are multiple ways to select options from dropdowns:
+
+```yaml
+# Select by value attribute
+- action: select
+  selector: "#dropdown"
+  value: "option1"
+  
+# Select by visible text/label
+- action: select
+  selector: "#dropdown"
+  label: "Option 1"
+  
+# Select by index (0-based)
+- action: select
+  selector: "#dropdown"
+  index: 0
+  
+# Select using a field from the user's data
+- action: select
+  selector: "#dropdown"
+  field: city
+```

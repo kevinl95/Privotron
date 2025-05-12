@@ -6,9 +6,66 @@ import sys
 import json
 import asyncio
 import concurrent.futures
+from pathlib import Path
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 from playwright.async_api import async_playwright
+
+
+# State name to abbreviation mapping
+STATE_ABBR = {
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Mississippi": "MS",
+    "Missouri": "MO",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY",
+    "District of Columbia": "DC",
+}
 
 
 @click.command(
@@ -106,7 +163,7 @@ def run_optout(first, last, email, phone, ssn, city, state, zip, profile, save_p
     profile_path = None
 
     if profile:
-        profile_path = os.path.join(profiles_dir, f"{profile if isinstance(profile, str) else datetime.now().strftime('%Y%m%d%H%M%S')}.json")
+        profile_path = os.path.join(profiles_dir, f"{profile}.json")
         if os.path.exists(profile_path):
             try:
                 with open(profile_path, "r") as f:
@@ -224,6 +281,7 @@ def run_optout(first, last, email, phone, ssn, city, state, zip, profile, save_p
         print("No brokers to process. All have been skipped or already processed.")
         return
 
+    # Create data dictionary with both full state name and abbreviation
     data = {
         "first_name": first, 
         "last_name": last, 
@@ -234,6 +292,10 @@ def run_optout(first, last, email, phone, ssn, city, state, zip, profile, save_p
         "city": city,
         "state": state
     }
+    
+    # Add state abbreviation if state is provided
+    if state and state in STATE_ABBR:
+        data["state_abbr"] = STATE_ABBR[state]
 
     # Validate parallel value
     if parallel < 1:
@@ -311,6 +373,16 @@ def process_brokers_sequentially(configs, data, profile, profile_path):
                             page.select_option(step['selector'], label=step['label'])
                         elif 'index' in step:
                             page.select_option(step['selector'], index=step['index'])
+                        elif 'field' in step:
+                            # Get the value from the data dictionary
+                            field_value = data[step['field']]
+                            page.select_option(step['selector'], field_value)
+                    elif action == 'select_state':
+                        # Special handling for state selection
+                        if step.get('format') == 'abbr' and 'state_abbr' in data:
+                            page.select_option(step['selector'], data['state_abbr'])
+                        else:
+                            page.select_option(step['selector'], data['state'])
                     else:
                         print(f"Unknown action: {action}")
 
@@ -352,6 +424,16 @@ async def process_broker_async(config, data):
                         await page.select_option(step['selector'], label=step['label'])
                     elif 'index' in step:
                         await page.select_option(step['selector'], index=step['index'])
+                    elif 'field' in step:
+                        # Get the value from the data dictionary
+                        field_value = data[step['field']]
+                        await page.select_option(step['selector'], field_value)
+                elif action == 'select_state':
+                    # Special handling for state selection
+                    if step.get('format') == 'abbr' and 'state_abbr' in data:
+                        await page.select_option(step['selector'], data['state_abbr'])
+                    else:
+                        await page.select_option(step['selector'], data['state'])
                 else:
                     print(f"Unknown action: {action}")
 
@@ -394,6 +476,16 @@ def process_broker_thread(config, data):
                         page.select_option(step['selector'], label=step['label'])
                     elif 'index' in step:
                         page.select_option(step['selector'], index=step['index'])
+                    elif 'field' in step:
+                        # Get the value from the data dictionary
+                        field_value = data[step['field']]
+                        page.select_option(step['selector'], field_value)
+                elif action == 'select_state':
+                    # Special handling for state selection
+                    if step.get('format') == 'abbr' and 'state_abbr' in data:
+                        page.select_option(step['selector'], data['state_abbr'])
+                    else:
+                        page.select_option(step['selector'], data['state'])
                 else:
                     print(f"Unknown action: {action}")
 

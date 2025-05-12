@@ -1,0 +1,34 @@
+name: InfoTracer
+slug: infotracer
+url: https://www.infotracer.com/
+required_fields:
+  - first_name
+  - last_name
+  - state
+  - city
+steps:
+  - action: navigate
+    url: "https://infotracer.com/optout/"
+  - action: fill
+    selector: '#InfoPay_Core_Components_OptOuts_DataRemovalServiceModel_fname'
+    field: first_name
+  - action: fill
+    selector: '#InfoPay_Core_Components_OptOuts_DataRemovalServiceModel_lname'
+    field: last_name
+  - action: select_state
+    selector: '#InfoPay_Core_Components_OptOuts_DataRemovalServiceModel_state'
+    format: abbr
+  - action: fill
+    selector: '#InfoPay_Core_Components_OptOuts_DataRemovalServiceModel_city'
+    field: city
+  - action: click
+    selector: '[class="form-btn"]'
+  - action: wait
+    seconds: 3
+  - action: click
+    selector: '#notrobl'
+  - action: wait
+    seconds: 20
+  - action: prompt_user_to_select_record
+    selector: '[class="class="table table-bordered table-hover"]'
+    description: "Choose the record(s) to remove"
