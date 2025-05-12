@@ -71,6 +71,7 @@ python main.py --profile "john" --reset
 - You can override saved information by providing command line arguments
 - Parallel processing allows multiple opt-outs to run simultaneously
 - State values are automatically converted between full names and abbreviations as needed
+- First and last names can be automatically combined into full name formats
 
 ### Security Note
 
@@ -83,6 +84,21 @@ precautions to protect this information:
 - Be careful when sharing your computer or profile files with others
 
 ## Broker Configuration
+
+### Full Name Handling
+
+For forms that require a full name in a single field:
+
+```yaml
+# Standard format: "First Last"
+- action: fill_full_name
+  selector: "#fullName"
+  
+# Reversed format: "Last, First"
+- action: fill_full_name
+  selector: "#reversedName"
+  format: reversed
+```
 
 ### State Selection
 

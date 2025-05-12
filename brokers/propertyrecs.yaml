@@ -1,0 +1,22 @@
+name: Property Recs
+slug: propertyrecs
+url: https://propertyrecs.com/
+required_fields:
+  - first_name
+  - last_name
+  - state
+steps:
+  - action: navigate
+    url: "https://dashboard.propertyrecs.com/opt-out"
+  - action: fill_full_name
+    selector: '[name="name"]'
+  - action: fill
+    selector: '[name="cityState"]'
+    field: state
+  - action: click
+    selector: '[type="submit"]'
+  - action: wait
+    seconds: 5
+  - action: prompt_user_to_select_record
+    selector: ".record-result"
+    description: "Choose the records to remove"

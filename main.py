@@ -293,6 +293,12 @@ def run_optout(first, last, email, phone, ssn, city, state, zip, profile, save_p
         "state": state
     }
     
+    # Add full name (first + last)
+    if first and last:
+        data["full_name"] = f"{first} {last}"
+        # Also add variations
+        data["full_name_reversed"] = f"{last}, {first}"
+    
     # Add state abbreviation if state is provided
     if state and state in STATE_ABBR:
         data["state_abbr"] = STATE_ABBR[state]
@@ -383,6 +389,13 @@ def process_brokers_sequentially(configs, data, profile, profile_path):
                             page.select_option(step['selector'], data['state_abbr'])
                         else:
                             page.select_option(step['selector'], data['state'])
+                    elif action == 'fill_full_name':
+                        # Special handling for full name fields
+                        format_type = step.get('format', 'standard')
+                        if format_type == 'reversed':
+                            page.fill(step['selector'], data['full_name_reversed'])
+                        else:
+                            page.fill(step['selector'], data['full_name'])
                     else:
                         print(f"Unknown action: {action}")
 
@@ -434,6 +447,13 @@ async def process_broker_async(config, data):
                         await page.select_option(step['selector'], data['state_abbr'])
                     else:
                         await page.select_option(step['selector'], data['state'])
+                elif action == 'fill_full_name':
+                    # Special handling for full name fields
+                    format_type = step.get('format', 'standard')
+                    if format_type == 'reversed':
+                        await page.fill(step['selector'], data['full_name_reversed'])
+                    else:
+                        await page.fill(step['selector'], data['full_name'])
                 else:
                     print(f"Unknown action: {action}")
 
@@ -486,6 +506,13 @@ def process_broker_thread(config, data):
                         page.select_option(step['selector'], data['state_abbr'])
                     else:
                         page.select_option(step['selector'], data['state'])
+                elif action == 'fill_full_name':
+                    # Special handling for full name fields
+                    format_type = step.get('format', 'standard')
+                    if format_type == 'reversed':
+                        page.fill(step['selector'], data['full_name_reversed'])
+                    else:
+                        page.fill(step['selector'], data['full_name'])
                 else:
                     print(f"Unknown action: {action}")
 
