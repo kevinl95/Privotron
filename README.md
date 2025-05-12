@@ -1,5 +1,72 @@
 # Privotron
 
+Privotron is an open-source framework and automation tool designed to help individuals reclaim their privacy by opting out of data brokers. Data brokers collect, store, and sell personal information without explicit consent, posing significant privacy risks. Privotron makes the opt-out process easier by automating browser interactions with data broker websites.
+
+## Why Privotron?
+
+- **Privacy Protection**: Data brokers collect and sell your personal information without your explicit consent
+- **Time Saving**: Manually opting out of dozens of data brokers can take hours or days
+- **Automation**: Privotron automates the tedious process of filling out opt-out forms
+- **Tracking**: Keep track of which brokers you've already opted out from
+- **Community-Driven**: Easily contribute new broker configurations to help others
+
+## Installation
+
+### Prerequisites
+
+- Python 3.13 or higher
+- poetry (for dependency management)
+
+### Using Poetry
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/privotron.git
+cd privotron
+
+# Install dependencies
+poetry install
+
+# Install Playwright browsers
+poetry run playwright install
+
+# Enter the shell
+poetry shell
+```
+
+## Getting Started
+
+### Quick Start
+
+```bash
+# Run with your personal information
+python main.py --first "John" --last "Doe" --email "john@example.com" --zip "12345"
+```
+
+### Creating a Profile
+
+Save your information as a profile to avoid re-entering it:
+
+```bash
+python main.py --first "John" --last "Doe" --email "john@example.com" --phone "5551234567" --zip "12345" --save-profile "john"
+```
+
+### Using a Profile
+
+```bash
+# Use an existing profile
+python main.py --profile "john"
+```
+
+### Parallel Processing
+
+Process multiple brokers simultaneously to save time:
+
+```bash
+# Process up to 3 brokers at the same time
+python main.py --profile "john" --parallel 3
+```
+
 ## Skip Specific Brokers
 
 You can skip specific brokers by adding their slugs to the `.skipbrokers` file in the brokers directory.
@@ -17,29 +84,6 @@ The broker slug is defined in each broker's YAML file under the `slug` field.
 ## User Profiles
 
 Privotron supports user profiles to save personal information and track which brokers have been processed for each user.
-
-### Creating a Profile
-
-```bash
-# Create a new profile while running the opt-out process
-python main.py --first "John" --last "Doe" --email "john@example.com" --phone "555-123-4567" --ssn "123-45-6789" --zip "12345" --save-profile "john"
-```
-
-### Using a Profile
-
-```bash
-# Use an existing profile (no need to provide personal info again)
-python main.py --profile "john"
-```
-
-### Parallel Processing
-
-Privotron can process multiple brokers simultaneously to save time:
-
-```bash
-# Process up to 3 brokers at the same time
-python main.py --profile "john" --parallel 3
-```
 
 ### Resetting Processed Brokers
 
@@ -63,7 +107,7 @@ python main.py --profile "john" --reset
 - `--reset`: Reset processed brokers for the profile
 - `--parallel`: Number of brokers to process in parallel (default: 1)
 
-### How It Works
+## How It Works
 
 - Profiles are stored in a `profiles` directory as JSON files
 - Each profile tracks which brokers have been processed
@@ -73,9 +117,21 @@ python main.py --profile "john" --reset
 - State values are automatically converted between full names and abbreviations as needed
 - First and last names can be automatically combined into full name formats
 
-For detailed information on adding new brokers, see [BROKER_GUIDE.md](BROKER_GUIDE.md).
+## Contributing
 
-### Security Note
+### Adding New Brokers
+
+We welcome contributions of new broker configurations! For detailed information on adding new brokers, see [BROKER_GUIDE.md](BROKER_GUIDE.md).
+
+### Development
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Security Note
 
 Social Security Numbers and other sensitive information are stored in profile files. 
 These files are saved locally on your computer, but you should take appropriate 
@@ -85,7 +141,7 @@ precautions to protect this information:
 - Consider encrypting your disk
 - Be careful when sharing your computer or profile files with others
 
-## Broker Configuration
+## Broker Configuration Examples
 
 ### Full Name Handling
 
@@ -142,3 +198,7 @@ There are multiple ways to select options from dropdowns:
   selector: "#dropdown"
   field: city
 ```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
