@@ -73,6 +73,8 @@ python main.py --profile "john" --reset
 - State values are automatically converted between full names and abbreviations as needed
 - First and last names can be automatically combined into full name formats
 
+For detailed information on adding new brokers, see [BROKER_GUIDE.md](BROKER_GUIDE.md).
+
 ### Security Note
 
 Social Security Numbers and other sensitive information are stored in profile files. 
