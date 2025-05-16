@@ -21,7 +21,7 @@ Privotron is an open-source framework and automation tool designed to help indiv
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/privotron.git
+git clone https://github.com/kevinl95/privotron.git
 cd privotron
 
 # Install dependencies
