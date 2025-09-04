@@ -50,7 +50,7 @@ poetry --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/privotron.git
+git clone https://github.com/kevinl95/privotron.git
 cd privotron
 
 # Install dependencies
