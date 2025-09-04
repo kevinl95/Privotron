@@ -17,6 +17,35 @@ Privotron is an open-source framework and automation tool designed to help indiv
 - Python 3.13 or higher
 - poetry (for dependency management)
 
+### Installing Poetry
+
+If you don't have Poetry installed, you can install it using one of these methods:
+
+**Recommended (Official installer):**
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+**Using pip:**
+```bash
+pip install poetry
+```
+
+**Using Homebrew (macOS):**
+```bash
+brew install poetry
+```
+
+**Using pipx (if you have it installed):**
+```bash
+pipx install poetry
+```
+
+After installation, you may need to restart your terminal or add Poetry to your PATH. Check that it's installed correctly:
+```bash
+poetry --version
+```
+
 ### Using Poetry
 
 ```bash
@@ -29,9 +58,36 @@ poetry install
 
 # Install Playwright browsers
 poetry run playwright install
+```
 
-# Enter the shell
+**Option 1: Run commands directly with Poetry (Recommended)**
+```bash
+# Run the application directly
+poetry run python main.py --help
+poetry run python main.py --first "John" --last "Doe" --email "john@example.com" --zip "12345"
+```
+
+**Option 2: Activate the virtual environment**
+```bash
+# For Poetry 2.x, activate the virtual environment:
+source $(poetry env info --path)/bin/activate
+
+# For Poetry 1.x, use the shell:
+
 poetry shell
+
+# For Windows:
+source $(poetry env info --path)/Scripts/activate
+
+```
+
+## Troubleshooting
+
+### Playwright Browser Installation
+
+If you see a message about installing browsers, run:
+```bash
+poetry run playwright install
 ```
 
 ## Getting Started
@@ -40,7 +96,7 @@ poetry shell
 
 ```bash
 # Run with your personal information
-python main.py --first "John" --last "Doe" --email "john@example.com" --zip "12345"
+poetry run python main.py --first "John" --last "Doe" --email "john@example.com" --zip "12345"
 ```
 
 ### Creating a Profile
@@ -48,14 +104,14 @@ python main.py --first "John" --last "Doe" --email "john@example.com" --zip "123
 Save your information as a profile to avoid re-entering it:
 
 ```bash
-python main.py --first "John" --last "Doe" --email "john@example.com" --phone "5551234567" --zip "12345" --save-profile "john"
+poetry run python main.py --first "John" --last "Doe" --email "john@example.com" --phone "5551234567" --zip "12345" --save-profile "john"
 ```
 
 ### Using a Profile
 
 ```bash
 # Use an existing profile
-python main.py --profile "john"
+poetry run python main.py --profile "john"
 ```
 
 ### Parallel Processing
@@ -64,7 +120,7 @@ Process multiple brokers simultaneously to save time:
 
 ```bash
 # Process up to 3 brokers at the same time
-python main.py --profile "john" --parallel 3
+poetry run python main.py --profile "john" --parallel 3
 ```
 
 ## Skip Specific Brokers
@@ -89,7 +145,7 @@ Privotron supports user profiles to save personal information and track which br
 
 ```bash
 # Reset the list of processed brokers for a profile
-python main.py --profile "john" --reset
+poetry run python main.py --profile "john" --reset
 ```
 
 ### Available Options
